@@ -21,3 +21,20 @@ services:
       options:
         max-size: "10m"            # 限制日志大小，防止撑爆磁盘
         max-file: "3"
+  phpmyadmin:
+    image: phpmyadmin:latest       # 使用官方最新版镜像
+    container_name: phpmyadmin-web
+    restart: always
+    ports:
+      - "9999:80"                  # 💡 映射宿主机的 8080 端口到 phpMyAdmin 网页
+    environment:
+      PMA_HOST: mysql              # 🔥 核心：让 phpMyAdmin 知道 MySQL 的容器名叫什么
+      PMA_PORT: 3306               # MySQL 端口
+      TZ: Asia/Shanghai
+    depends_on:
+      - mysql                      # 确保 MySQL 容器先启动，phpMyAdmin 后启动
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
